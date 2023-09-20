@@ -1,41 +1,67 @@
 <template>
-  <div class="home flex-grow-1 d-flex flex-column align-items-center justify-content-center">
-    <div class="home-card p-5 bg-white rounded elevation-3">
-      <img src="https://bcw.blob.core.windows.net/public/img/8600856373152463" alt="CodeWorks Logo"
-        class="rounded-circle">
-      <h1 class="my-5 bg-dark text-white p-3 rounded text-center">
-        Vue 3 Starter
-      </h1>
+<div class="container-fluid">
+  <!-- STUB Intro box -->
+  <section class="row">
+    <div class="col-12 mt-5 p-3 bg-dark text-light">
+      <h3 class="p-3">Welcome to Tower</h3>
+      <h3 class="p-3">Revolutionizing the event game!</h3>
+      <h3 class="p-3">Get jiggy wit it</h3>
     </div>
+  </section>
+<!-- STUB filter btns -->
+  <section class="row bg-info g-3 p-2 rounded my-2">
+    <button class="btn col btn-outline-light" @click="filterBy = ''">All</button>
+<button class="btn col btn-outline-light" @click="filterBy = 'concert'">Concert</button>
+<button class="btn col btn-outline-light" @click="filterBy = 'convention'">Convention</button>
+  <button class="btn col btn-outline-light" @click="filterBy = 'sport'">Sport</button>
+  <button class="btn col btn-outline-light" @click="filterBy = 'digital'">Digital</button>
+  </section>
+<!-- STUB Event Cards -->
+<section class="row">
+  <div v-for="event in events" :key="event.id" class="col-6 col-md-4">
+  <EventCard :event="event"/>
   </div>
+</section>
+</div>
 </template>
 
 <script>
+import { computed, onMounted, ref } from 'vue';
+import Pop from '../utils/Pop.js';
+import {eventsService} from '../services/EventsService.js'
+import { AppState } from '../AppState.js';
+import EventCard from '../components/EventCard.vue';
+
 export default {
-  setup() {
-    return {}
-  }
+    setup() {
+        onMounted(() => {
+            getEvents();
+        });
+        const filterBy = ref('');
+        async function getEvents() {
+            try {
+                await eventsService.getEvents();
+            }
+            catch (error) {
+                Pop.error(error);
+            }
+        }
+        return {
+            filterBy,
+            events: computed(() => {
+                if (!filterBy.value) {
+                    return AppState.events;
+                }
+                else {
+                    return AppState.events.filter(event => event.type == filterBy.value);
+                }
+            })
+        };
+    },
+    components: { EventCard }
 }
 </script>
 
 <style scoped lang="scss">
-.home {
-  display: grid;
-  height: 80vh;
-  place-content: center;
-  text-align: center;
-  user-select: none;
 
-  .home-card {
-    width: 50vw;
-
-    >img {
-      height: 200px;
-      max-width: 200px;
-      width: 100%;
-      object-fit: contain;
-      object-position: center;
-    }
-  }
-}
 </style>
