@@ -5,7 +5,7 @@ import { Schema } from "mongoose";
 export const CommentsSchema = new Schema({
     creatorId: { type: Schema.Types.ObjectId, ref: 'Account', required: true },
     eventId: { type: Schema.Types.ObjectId, ref: 'Event', required: true },
-    body: { type: String, minLength: 3, maxLength: 300 },
+    body: { type: String, minLength: 3, maxLength: 600 },
 }, { timestamps: true, toJSON: { virtuals: true } })
 
 CommentsSchema.virtual('creator', {

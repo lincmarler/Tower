@@ -1,8 +1,14 @@
 import { dbContext } from "../db/DbContext.js"
 import { BadRequest } from "../utils/Errors.js"
+import { eventsService } from "./EventsService.js"
 
 
 class CommentsService {
+    async getCommentsInEvent(eventId) {
+        await eventsService.getEventById(eventId)
+        const comments = await dbContext.Comments.find({ eventId: eventId }).populate('creator event')
+        return comments
+    }
     async deleteComment(commentId) {
         const comment = await dbContext.Comments.findById(commentId)
         if (!comment) {

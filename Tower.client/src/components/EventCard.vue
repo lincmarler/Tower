@@ -19,11 +19,12 @@
 
 <script>
 import { computed } from 'vue';
-import { AppState } from '../AppState';
+import { AppState } from '../AppState.js';
+import { Event } from '../models/Event.js';
 
 
 export default {
-    props: {event: {type: Event || Object, required: true}},
+    props: {event: {type: Event, required: true}},
 setup() {
   return {
     coverImg: computed(() => `url(${AppState.events.coverImg})`)

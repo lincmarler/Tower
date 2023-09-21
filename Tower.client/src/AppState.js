@@ -11,4 +11,7 @@ export const AppState = reactive({
 
   /**@type {Event} */
   activeEvent: null,
+
+  /**@type {Comment[]} */
+  activeEventComments: []
 })
