@@ -8,6 +8,11 @@
       <h3 class="p-3">Get jiggy wit it</h3>
     </div>
   </section>
+  <section class="row">
+    <div class="col-12">
+      <EventForm/>
+    </div>
+  </section>
 <!-- STUB filter btns -->
   <section class="row bg-info g-3 p-2 rounded my-2">
     <button class="btn col btn-outline-light" @click="filterBy = ''">All</button>
@@ -31,6 +36,7 @@ import Pop from '../utils/Pop.js';
 import {eventsService} from '../services/EventsService.js'
 import { AppState } from '../AppState.js';
 import EventCard from '../components/EventCard.vue';
+import EventForm from '../components/EventForm.vue';
 
 export default {
     setup() {
@@ -58,7 +64,7 @@ export default {
             })
         };
     },
-    components: { EventCard }
+    components: { EventCard, EventForm }
 }
 </script>
 

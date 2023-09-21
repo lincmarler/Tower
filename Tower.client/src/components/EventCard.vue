@@ -13,6 +13,9 @@
             <div class="col-12 text-end">
                 {{ event.capacity }} spots left!
             </div>
+            <div v-if="event.isCanceled" class="col-12 text-danger fw-bold">
+CANCELLED
+            </div>
         </section>
 </router-link>
 </template>
