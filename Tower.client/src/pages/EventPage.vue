@@ -11,9 +11,11 @@
                         <p>{{ event.description }}</p>
                         <p>{{ event.startDate }}</p>
                         <p>There are {{ event.capacity }} spots left!</p>
+                        <p>Ticket Count: {{ event.ticketCount }}</p>
                     </div>
                     <div class="col-12 col-md-2 text-center">
-                        <button class="btn btn-success">Attend💃</button>
+                        <button @click="createTicket" v-if="user.isAuthenticated && account.id != ticket.accountId && event.isCanceled && event.capacity == 0" roll="button"  class="btn btn-success">Attend💃</button>
+                        <button @click="deleteTicket" v-else roll="button"  class="btn btn-success">Cancel❌</button>
                     </div>
                 </section>
             </div>
@@ -55,6 +57,8 @@ import { Comment } from '../models/Comment.js';
 import CommentCard from '../components/CommentCard.vue';
 import { api } from '../services/AxiosService';
 import { logger } from '../utils/Logger';
+import {ticketsService} from '../services/TicketsService.js'
+import {Ticket} from '../models/Ticket.js'
 
 export default {
     setup() {
@@ -84,9 +88,11 @@ export default {
         return {
             commentData,
             user: computed(() => AppState.user),
-            tickets: computed(() => AppState.tickets),
+            ticket: computed(() => AppState.tickets),
             event: computed(() => AppState.activeEvent),
             comments: computed(() => AppState.activeEventComments),
+            account: computed(() => AppState.account),
+            
             // coverImg: computed(() => `url(${AppState.events.coverImg})`),
 
             async createComment(){
@@ -101,8 +107,23 @@ export default {
                 }
             },
 
-
-
+            async createTicket(){
+                try {
+                    let ticketData = {eventId: route.params.eventId}
+                    await ticketsService.createTicket(ticketData)
+                } catch (error) {
+                    Pop.error(error)
+                }
+            },
+            
+            async deleteTicket(){
+                try {
+                    let ticket = AppState.activeEventTickets.find(ticket => ticket.accountId == AppState.account.id)
+                    await ticketsService.deleteTicket(ticket.id)
+                } catch (error) {
+                    Pop.error(error)
+                }
+            }
         };
     },
     components: { CommentCard }

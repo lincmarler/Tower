@@ -5,8 +5,11 @@ import { BadRequest, Forbidden } from "../utils/Errors.js"
 
 class EventsService {
 
-    async editEvent(eventId, updates) {
+    async editEvent(eventId, updates, userId) {
         const originalEvent = await dbContext.Events.findById(eventId)
+        if (userId != originalEvent.creatorId) {
+            throw new Forbidden('NO DUDE')
+        }
         if (originalEvent.isCanceled == true) throw new BadRequest('Cannot edit cancelled event')
         if (!originalEvent) throw new Error(`Unbale to find event at ${eventId}`)
         originalEvent.name = updates.name || originalEvent.name

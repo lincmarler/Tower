@@ -50,8 +50,9 @@ export class EventsController extends BaseController {
     async editEvent(req, res, next) {
         try {
             const updates = req.body
+            const userId = req.userInfo.id
             const eventId = req.params.eventId
-            const editedEvent = await eventsService.editEvent(eventId, updates)
+            const editedEvent = await eventsService.editEvent(eventId, updates, userId)
             res.send(editedEvent)
         } catch (error) {
             next(error)
@@ -60,6 +61,7 @@ export class EventsController extends BaseController {
 
     async cancelEvent(req, res, next) {
         try {
+
             const event = await eventsService.cancelEvent(req.params.eventId, req.userInfo.id)
             res.send(event)
         } catch (error) {

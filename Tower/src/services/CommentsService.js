@@ -1,5 +1,5 @@
 import { dbContext } from "../db/DbContext.js"
-import { BadRequest } from "../utils/Errors.js"
+import { BadRequest, Forbidden } from "../utils/Errors.js"
 import { eventsService } from "./EventsService.js"
 
 
@@ -9,10 +9,13 @@ class CommentsService {
         const comments = await dbContext.Comments.find({ eventId: eventId }).populate('creator event')
         return comments
     }
-    async deleteComment(commentId) {
+    async deleteComment(commentId, userId) {
         const comment = await dbContext.Comments.findById(commentId)
         if (!comment) {
             throw new BadRequest(`No comment at ${commentId}`)
+        }
+        if (userId != comment.id) {
+            throw new Forbidden('NO')
         }
         await comment.remove()
         return 'remove the comment'
