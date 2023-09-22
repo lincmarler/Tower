@@ -7,6 +7,14 @@ import { Comment } from "../models/Comment.js"
 
 class EventsService{
 
+    async createEvent(eventData){
+        const res = await api.post('api/events', eventData)
+        const newEvent = new Event(res.data)
+        AppState.events.unshift(newEvent)
+        return newEvent
+    }
+
+
     async getEvents(){
         const res = await api.get('api/events')
         logger.log('got events', res.data)

@@ -45,6 +45,7 @@
 
 <script>
 import { computed, ref, watchEffect } from 'vue';
+import { Event } from '../models/Event';
 import { AppState } from '../AppState';
 import { useRoute } from 'vue-router';
 import Pop from '../utils/Pop';
@@ -58,7 +59,6 @@ import { logger } from '../utils/Logger';
 export default {
     setup() {
         const commentData = ref({})
-        const inProgress = ref(false);
         const route = useRoute();
         watchEffect(() => {
             getEventById();
@@ -74,6 +74,7 @@ export default {
         }
         async function getEventById() {
             try {
+                AppState.activeEvent = null
                 await eventsService.getEventById(route.params.eventId);
             }
             catch (error) {
@@ -86,7 +87,7 @@ export default {
             tickets: computed(() => AppState.tickets),
             event: computed(() => AppState.activeEvent),
             comments: computed(() => AppState.activeEventComments),
-            coverImg: computed(() => `url(${AppState.events.coverImg})`),
+            // coverImg: computed(() => `url(${AppState.events.coverImg})`),
 
             async createComment(){
                 try {

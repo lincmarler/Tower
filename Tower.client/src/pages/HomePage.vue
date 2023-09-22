@@ -9,7 +9,7 @@
     </div>
   </section>
   <section class="row">
-    <div class="col-12">
+    <div class="col-12 mt-3">
       <EventForm/>
     </div>
   </section>
