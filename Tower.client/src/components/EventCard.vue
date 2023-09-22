@@ -14,7 +14,10 @@
                 {{ event.capacity }} spots left!
             </div>
             <div v-if="event.isCanceled" class="col-12 text-danger fw-bold">
-CANCELLED
+                CANCELED
+            </div>
+            <div v-if="event.capacity == 0" class="col-12 text-danger fw-bold">
+                AT CAPACITY
             </div>
         </section>
 </router-link>

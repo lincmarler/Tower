@@ -8,8 +8,8 @@
       <h3 class="p-3">Get jiggy wit it</h3>
     </div>
   </section>
-  <section class="row">
-    <div class="col-12 mt-3">
+  <section v-if="account" class="row">
+    <div  class="col-12 mt-3">
       <EventForm/>
     </div>
   </section>
@@ -54,6 +54,7 @@ export default {
         }
         return {
             filterBy,
+            account: computed(() => AppState.account),
             events: computed(() => {
                 if (!filterBy.value) {
                     return AppState.events;

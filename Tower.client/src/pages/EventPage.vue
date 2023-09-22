@@ -1,9 +1,9 @@
 <template>
     <div class="container">
-        <section class="row mt-5">
+        <section v-if="event" class="row mt-5">
             <div class="col-12 bg-dark p-3">
                 <section class="row">
-                    <div class="col-12 col-md-3">
+                    <div class="col-12 col-md-3" >
                         <img class="cover-img img-fluid" :src="event.coverImg" alt="">
                     </div>
                     <div class="col-12 col-md-7 p-3">
@@ -12,22 +12,27 @@
                         <p>{{ event.startDate }}</p>
                         <p>There are {{ event.capacity }} spots left!</p>
                         <p>Ticket Count: {{ event.ticketCount }}</p>
+                        <p class="fs-1 text-danger" v-if="event.isCanceled">CANCELED</p>
+                        <p class="fs-1 text-danger" v-if="event.capacity == 0">AT CAPACITY</p>
                     </div>
-                    <div class="col-12 col-md-2 text-center">
-                        <button @click="createTicket" v-if="user.isAuthenticated && account.id != ticket.accountId && event.isCanceled && event.capacity == 0" roll="button"  class="btn btn-success">Attend💃</button>
-                        <button @click="deleteTicket" v-else roll="button"  class="btn btn-success">Cancel❌</button>
+                    <div class="col-12 col-md-2 text-center" v-if="account">
+                        <button @click="createTicket"  roll="button" v-if="account && event.capacity != 0" class="btn btn-success p-2 m-2">Attend💃</button>
+                        <!-- <button @click="deleteTicket(ticket.id, ticket.profile.id)"  roll="button" v-if="account && event.capacity != 0" class="btn btn-danger p-2 m-2">Cancel🥛</button> -->
                     </div>
                 </section>
             </div>
             <section class="row">
-                <div  class="col-12">
-                    <img class="ticket-holder" v-for="ticket in tickets" :key="ticket.id" :src="ticket.profile.picture" alt="">
+                <div  class="col-12 img-fluid">
+                    <div v-for="ticket in tickets" :key="ticket.id">
+                        <button @click="deleteTicket(ticket.id, ticket.profile.id)"  roll="button" v-if="account && event.capacity != 0 && account.id == ticket.profile.id" class="btn btn-danger p-2 m-2">Cancel🥛</button>
+                        <img class="ticket-holder"   :src="ticket.profile.picture" alt="">
+                    </div>
                 </div>
             </section>
                 <section class="row mt-5 p-3">
                     <div class="col-12 bg-secondary">
                         <section class="row p-3">
-                            <div class="col-12 p-2">
+                            <div class="col-12 p-2" v-if="account">
                                 <form @submit.prevent="createComment">
                                     <label for="body">Body of comment</label>
                                     <input v-model="commentData.body" type="text" class="form-control" maxlength="300" minlength="5" required>
@@ -88,7 +93,7 @@ export default {
         return {
             commentData,
             user: computed(() => AppState.user),
-            ticket: computed(() => AppState.activeEventTickets),
+            tickets: computed(() => AppState.activeEventTickets),
             event: computed(() => AppState.activeEvent),
             comments: computed(() => AppState.activeEventComments),
             account: computed(() => AppState.account),
@@ -110,16 +115,18 @@ export default {
             async createTicket(){
                 try {
                     let ticketData = {eventId: route.params.eventId}
+                    // logger.log(ticketData)
                     await ticketsService.createTicket(ticketData)
                 } catch (error) {
                     Pop.error(error)
                 }
             },
             
-            async deleteTicket(){
+            async deleteTicket(ticketId){
                 try {
-                    let ticket = AppState.activeEventTickets.find(ticket => ticket.accountId == AppState.account.id)
-                    await ticketsService.deleteTicket(ticket.id)
+                    // let ticket = AppState.activeEventTickets.find(ticket => ticket.accountId == AppState.account.id)
+                    logger.log(ticketId)
+                    await ticketsService.deleteTicket(ticketId)
                 } catch (error) {
                     Pop.error(error)
                 }

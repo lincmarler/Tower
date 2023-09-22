@@ -14,8 +14,8 @@ class CommentsService {
         if (!comment) {
             throw new BadRequest(`No comment at ${commentId}`)
         }
-        if (userId != comment.id) {
-            throw new Forbidden('NO')
+        if (userId != comment.creatorId) {
+            throw new Forbidden("NO this ain't yours")
         }
         await comment.remove()
         return 'remove the comment'

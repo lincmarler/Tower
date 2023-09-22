@@ -11,11 +11,10 @@ async createComment(commentData){
 }
 
     async deleteComment(commentId) {
-        // const res = await api.delete(`api/comments/${commentId}`)
-        // logger.log(res.data)
-       const comment = AppState.activeEventComments.find(comm => comm.id == commentId)
-       logger.log(comment)
-    //    comment.remove()
+        await api.delete(`api/comments/${commentId}`)
+        let indexToRemove = AppState.activeEventTickets.findIndex(comment => comment.id == commentId)
+        AppState.activeEventTickets.splice(indexToRemove, 1)
+
     }
 }
 
