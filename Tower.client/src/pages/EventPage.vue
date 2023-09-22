@@ -88,7 +88,7 @@ export default {
         return {
             commentData,
             user: computed(() => AppState.user),
-            ticket: computed(() => AppState.tickets),
+            ticket: computed(() => AppState.activeEventTickets),
             event: computed(() => AppState.activeEvent),
             comments: computed(() => AppState.activeEventComments),
             account: computed(() => AppState.account),
