@@ -3,6 +3,7 @@ import { logger } from "../utils/Logger.js"
 import { api } from "./AxiosService.js"
 import { Event } from "../models/Event.js"
 import { Comment } from "../models/Comment.js"
+import { Ticket } from "../models/Ticket.js"
 
 
 class EventsService{
@@ -34,6 +35,17 @@ class EventsService{
         logger.log('comments', res.data)
         AppState.activeEventComments = res.data.map(com => new Comment(com))
         logger.log('saved comments', AppState.activeEventComments)
+    }
+
+    async getTicketsByEventId(eventId){
+        const res = await api.get(`api/events/${eventId}/tickets`)
+        logger.log('tickets', res.data)
+        AppState.activeEventTickets = res.data.map(ticket => new Ticket(ticket))
+    }
+
+    async CancelEvent(eventId){
+        const res = await api.delete(`api/events/${eventId}`)
+        AppState.events.push(res.data)
     }
 }
 

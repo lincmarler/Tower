@@ -1,4 +1,5 @@
 import { AppState } from "../AppState"
+import { Event } from "../models/Event"
 import { Ticket } from "../models/Ticket"
 import { logger } from "../utils/Logger"
 import { api } from "./AxiosService"
@@ -11,7 +12,6 @@ class TicketsService{
     logger.log('ticket',res.data)
 // logger.log(AppState.activeEventTickets, 'appstate tickets')
 AppState.activeEventTickets.push(new Ticket(res.data))
-
     }
 
     async deleteTicket(ticketId) {
