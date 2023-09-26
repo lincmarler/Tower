@@ -16,7 +16,7 @@
                         <p class="fs-1 text-danger" v-if="event.capacity == 0">AT CAPACITY</p>
                         <button @click="CancelEvent()" class="btn btn-warning" v-if="event.creatorId == account.id && !event.isCanceled">Cancel Event</button>
                     </div>
-                    <div class="col-12 col-md-2 text-center" v-if="account">
+                    <div class="col-12 col-md-2 text-center" v-if="account && !isInTickets">
                         <button @click="createTicket"  roll="button" v-if="account && event.capacity != 0 && !event.isCanceled" class="btn btn-success p-2 m-2">Attend💃</button>
                         <!-- <button @click="deleteTicket(ticket.id, ticket.profile.id)"  roll="button" v-if="account && event.capacity != 0" class="btn btn-danger p-2 m-2">Cancel🥛</button> -->
                     </div>
@@ -106,6 +106,7 @@ export default {
             commentData,
             user: computed(() => AppState.user),
             tickets: computed(() => AppState.activeEventTickets),
+            isInTickets: computed(()=> AppState.activeEventTickets.find(t => t.accountId == AppState.account.id)),
             event: computed(() => AppState.activeEvent),
             comments: computed(() => AppState.activeEventComments),
             account: computed(() => AppState.account),
